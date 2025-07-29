@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Header from "./Components/Header";
 import Button from "./Components/Button";
 import ListRendering from "./Components/ListRendering";
 import RenderingObject from "./Components/RenderingObject";
+import FlipCards from "./Components/FlipCards";
 
 const App = () => {
   const [count, setCount] = useState(0);
@@ -10,9 +11,9 @@ const App = () => {
   // const animals = ["dog", "cat", "chicken", "cow", "sheep", "horse"];
 
   // const mappingAnimals = animals.map((b, i) => <li key={i}>{b}</li>);
-  function handlesubmit(formdata) {
-    alert(`Hello ${formdata.get("fname")} ${formdata.get("lname")}!`);
-  }
+  // function handlesubmit(formdata) {
+  //   alert(`Hello ${formdata.get("fname")} ${formdata.get("lname")}!`);
+  // }
 
   const obj1 = [
     {
@@ -26,6 +27,22 @@ const App = () => {
       punchline: "Because they need to C#",
     },
   ];
+  const [fetchedJokes, setFetchedJokes] = useState([]);
+  useEffect(() => {
+    const fetchJokes = async () => {
+      try {
+        const response = await fetch(
+          "https://random-data-api.com/api/users/random_user?size=10"
+        );
+        const data = await response.json();
+        setFetchedJokes(data);
+        console.log(data);
+      } catch (error) {
+        console.error("Error fetching jokes:", error);
+      }
+    };
+    fetchJokes();
+  }, []);
 
   return (
     <>
@@ -53,7 +70,8 @@ const App = () => {
             GREET ME
           </button>
         </form> */}
-        <RenderingObject obj={obj1} />
+        {/* <RenderingObject obj={obj1} /> */}
+        <FlipCards cards={fetchedJokes} />
       </div>
     </>
   );
